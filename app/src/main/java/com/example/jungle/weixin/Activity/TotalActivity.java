@@ -71,6 +71,7 @@ public class TotalActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sp=getSp(this);
+        ManagerUtils.addActivity(this);
         CodeUtils.setmToken(getCurrent(sp).getAcc_token());
         CodeUtils.setmID(Long.parseLong(getCurrent(sp).getUid()));
 
@@ -267,20 +268,15 @@ public class TotalActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void onBackPressed() {
-
-        android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
-        System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
-        ActivityManager am = (ActivityManager)getSystemService (Context.ACTIVITY_SERVICE);
-        am.restartPackage(getPackageName());
+        ManagerUtils.exit();
 }
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ManagerUtils.removeActivity(this);
+    }
 
 }

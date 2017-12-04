@@ -58,6 +58,7 @@ public class MyWebView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ManagerUtils.addActivity(this);
         sp = getSp(this);
         if (getCurrent(sp) == null) {
             setContentView(R.layout.activity_my_web_view);
@@ -131,7 +132,12 @@ public class MyWebView extends AppCompatActivity {
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
+                    if(getCurrent(sp)!=null){
+                        onBackPressed();
+                    }else{
+                        ManagerUtils.exit();
+                    }
+
                 }
             });
 
@@ -149,11 +155,15 @@ public class MyWebView extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ManagerUtils.removeActivity(this);
     }
 
 }
